@@ -15,7 +15,7 @@ services:
     container_name: gestao_vagas_pgadmin
     image: dpage/pgadmin4
     ports:
-      - "8080:80"
+      - "5432:5433"
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
