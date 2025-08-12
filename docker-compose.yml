@@ -1,7 +1,9 @@
+version: '3.8'
+
 services:
   postgres:
     container_name: gestao_vagas_postgres
-    image: postgres
+    image: postgres:15
     ports:
       - "5432:5432"
     environment:
@@ -9,15 +11,31 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=gestao_vagas
     volumes:
-      - .:/postgres
+      - postgres_data:/var/lib/postgresql/data  # Volume nomeado para persistir dados
+    networks:
+      - gestao_vagas_network
+    restart: unless-stopped
 
   pgadmin:
     container_name: gestao_vagas_pgadmin
     image: dpage/pgadmin4
     ports:
-      - "5432:5433"
+      - "8088:80"  # Corrigido: pgAdmin roda na porta 80 internamente
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
     depends_on:
       - postgres
+    networks:
+      - gestao_vagas_network
+    restart: unless-stopped
+
+
+# Volume nomeado para persistir dados do PostgreSQL
+volumes:
+  postgres_data:
+
+# Rede para comunicação entre serviços
+networks:
+  gestao_vagas_network:
+    driver: bridge
